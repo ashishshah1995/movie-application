@@ -1,0 +1,62 @@
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
+using WebjetMovieApp.API.Models;
+
+namespace WebjetMovieApp.API.Services
+{
+    public class CinemaWorldService : IMovieProvider
+    {
+        private readonly IHttpClientFactory _clientFactory;
+        private readonly IConfiguration _config;
+        public string ProviderName => "cinemaworld";
+
+        public CinemaWorldService(IHttpClientFactory clientFactory, IConfiguration config)
+        {
+            _clientFactory = clientFactory;
+            _config = config;
+        }
+
+        public async Task<IEnumerable<Movie>> GetMovies()
+        {
+            using var client = _clientFactory.CreateClient("ResilientClient");
+            client.DefaultRequestHeaders.Add("x-access-token", _config["WebjetApiToken"]);
+            
+            try
+            {
+                var response = await client.GetAsync("https://webjetapitest.azurewebsites.net/api/cinemaworld/movies");
+                response.EnsureSuccessStatusCode();
+                
+                var content = await response.Content.ReadAsStringAsync();
+                var movieResponse = JsonConvert.DeserializeObject<MovieListResponse>(content);
+                
+                return movieResponse?.Movies ?? new List<Movie>();
+            }
+            catch
+            {
+                return new List<Movie>();
+            }
+        }
+
+        public async Task<MovieDetails> GetMoviePrice(string id)
+        {
+            using var client = _clientFactory.CreateClient("ResilientClient");
+            client.DefaultRequestHeaders.Add("x-access-token", _config["WebjetApiToken"]);
+            
+            try
+            {
+                var response = await client.GetAsync($"https://webjetapitest.azurewebsites.net/api/cinemaworld/movie/{id}");
+                response.EnsureSuccessStatusCode();
+                
+                var content = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<MovieDetails>(content) ?? new MovieDetails();
+            }
+            catch
+            {
+                return new MovieDetails();
+            }
+        }
+    }
+}
