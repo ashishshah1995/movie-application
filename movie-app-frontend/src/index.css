@@ -1,19 +1,464 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  padding: 20px;
+.App {
+  text-align: center;
 }
 
-.cheapest-cell {
-  background-color: #d4edda !important;
-  font-weight: bold;
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
 }
 
-.table th {
-  background-color: #343a40;
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
   color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===== Movie List Enhancements ===== */
+.movie-list-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.movie-list-title {
+  color: #61dafb;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2.2rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.table-container {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.table-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.movie-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.movie-table th {
+  background-color: rgba(97, 218, 251, 0.7);
+  color: #282c34;
+  padding: 1rem;
+  text-align: left;
+  position: sticky;
+  top: 0;
+  font-weight: 600;
+}
+
+.movie-table td {
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.movie-table tr:last-child td {
+  border-bottom: none;
+}
+
+.movie-table tr:hover {
+  background-color: rgba(97, 218, 251, 0.1);
+}
+
+.movie-title {
+  font-weight: 600;
+  /*color: white;*/
+}
+
+.best-price {
+  font-weight: 700;
+  color: #61dafb;
+}
+
+.provider-tag {
+  display: inline-block;
+  padding: 0.3rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  background-color: rgba(97, 218, 251, 0.2);
+  color: #61dafb;
+  border: 1px solid #61dafb;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .movie-table {
+    display: block;
+    overflow-x: auto;
+  }
+
+  .movie-list-title {
+    font-size: 1.8rem;
+  }
+
+  .App-header {
+    padding: 20px;
+  }
+}
+
+/* ===== Enhanced Movie Styles ===== */
+.movie-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.search-box {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 0.5rem 1rem 0.5rem 2rem;
+  border-radius: 20px;
+  border: 1px solid #61dafb;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #61dafb;
+}
+
+.sort-options {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sort-options select {
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  border: 1px solid #61dafb;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.filter-icon {
+  color: #61dafb;
+}
+
+.view-toggle {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.view-toggle button {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid #61dafb;
+  padding: 0.5rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.view-toggle button.active {
+  background: #61dafb;
+  color: #282c34;
+}
+
+.results-count {
+  margin-bottom: 1rem;
+  text-align: right;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+/* Table Enhancements */
+.savings {
+  color: #4caf50;
+  font-weight: 500;
+}
+
+.favorite-star {
+  color: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.favorite-star:hover {
+  color: gold;
+  transform: scale(1.2);
+}
+
+.favorite-star.active {
+  color: gold;
+}
+
+.movie-title {
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.movie-title:hover {
+  color: #61dafb;
+  text-decoration: underline;
+}
+
+/* Grid View */
+.movie-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.movie-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.movie-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.card-header h3 {
+  margin: 0;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.card-header h3:hover {
+  color: #61dafb;
+}
+
+.card-body {
+  margin: 1rem 0;
+}
+
+.card-year {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin-bottom: 0.5rem;
+}
+
+.card-prices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.price-item {
+  display: flex;
+  justify-content: space-between;
+}
+
+.price-label {
+  font-weight: 500;
+}
+
+.price-value {
+  font-weight: 600;
+}
+
+.price-value.best-price {
+  color: #61dafb;
+}
+
+.savings-badge {
+  background: rgba(76, 175, 80, 0.2);
+  color: #4caf50;
+  padding: 0.2rem 0.5rem;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+  display: inline-block;
+}
+
+/* Movie Modal */
+.movie-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+  background: #282c34;
+  padding: 2rem;
+  border-radius: 10px;
+  max-width: 600px;
+  width: 90%;
+  position: relative;
+  border: 1px solid #61dafb;
+  box-shadow: 0 5px 30px rgba(97, 218, 251, 0.3);
+}
+
+.close-modal {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.close-modal:hover {
+  color: #61dafb;
+  transform: scale(1.1);
+}
+
+.modal-prices {
+  display: flex;
+  gap: 2rem;
+  margin: 2rem 0;
+  justify-content: center;
+}
+
+.price-card {
+  flex: 1;
+  padding: 1.5rem;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  text-align: center;
+  transition: all 0.3s;
+}
+
+.price-card.best {
+  background: rgba(97, 218, 251, 0.1);
+  border: 1px solid #61dafb;
+}
+
+.price-card h3 {
+  margin-top: 0;
+}
+
+.price-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0.5rem 0;
+}
+
+.best-deal {
+  font-size: 1.2rem;
+  margin: 1.5rem 0;
+  color: #61dafb;
+  text-align: center;
+}
+
+.favorite-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 auto;
+  padding: 0.8rem 1.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid #61dafb;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.favorite-btn:hover {
+  background: rgba(97, 218, 251, 0.2);
+}
+
+.favorite-btn.active {
+  background: rgba(255, 215, 0, 0.2);
+  border-color: gold;
+  color: gold;
+}
+
+.favorite-btn.active:hover {
+  background: rgba(255, 215, 0, 0.3);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .movie-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .modal-prices {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .movie-table {
+    font-size: 0.9rem;
+  }
+
+  .movie-table th,
+  .movie-table td {
+    padding: 0.5rem;
+  }
 }
