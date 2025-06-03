@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -21,7 +22,7 @@ namespace WebjetMovieApp.API.Services
 
         public async Task<IEnumerable<Movie>> GetMovies()
         {
-            using var client = _clientFactory.CreateClient("ResilientClient");
+            var client = _clientFactory.CreateClient("ResilientClient");
             client.DefaultRequestHeaders.Add("x-access-token", _config["WebjetApiToken"]);
             
             try
@@ -34,7 +35,7 @@ namespace WebjetMovieApp.API.Services
                 
                 return movieResponse?.Movies ?? new List<Movie>();
             }
-            catch
+            catch (HttpRequestException ex)
             {
                 return new List<Movie>();
             }
@@ -42,7 +43,7 @@ namespace WebjetMovieApp.API.Services
 
         public async Task<MovieDetails> GetMoviePrice(string id)
         {
-            using var client = _clientFactory.CreateClient("ResilientClient");
+            var client = _clientFactory.CreateClient("ResilientClient");
             client.DefaultRequestHeaders.Add("x-access-token", _config["WebjetApiToken"]);
             
             try
@@ -53,7 +54,7 @@ namespace WebjetMovieApp.API.Services
                 var content = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<MovieDetails>(content) ?? new MovieDetails();
             }
-            catch
+            catch (HttpRequestException ex)
             {
                 return new MovieDetails();
             }
