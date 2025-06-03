@@ -2,12 +2,17 @@
 
 Build Web application that aggregates and compares movie prices from CinemaWorld and FilmWorld providers, showing the cheapest price available for each movie.
 
+## Project Demo
+
+https://screenrec.com/share/AmjYrcle0v
+
 ## Features
 
 - Get movie lists from multiple providers
 - Get detailed movie information with prices
 - Compare prices across providers
 - Resilient HTTP client implementation
+
 
 ## Technologies Used
 
